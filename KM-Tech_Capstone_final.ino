@@ -180,7 +180,6 @@ void frequencySweepRaw() {
 
         // Print out the frequency data
 
-*/
         // Compute impedance
         double magnitude = sqrt(pow(real, 2) + pow(imag, 2));
         double impedance = 1/(magnitude*gain[i]);
