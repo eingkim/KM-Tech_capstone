@@ -3,7 +3,7 @@ import numpy as np
 import serial
 
 judging_data = 4
-features = 8
+features = 43
 inf = 10000
 
 model = models.load_model('test_model.h5')
@@ -26,14 +26,18 @@ while True:
 		if len(data_list) < judging_data:
 			continue
 		data = np.array(data_list)
-		#print(data)
+		print(data)
 		#data = data.reshape((1, judging_data, features))
 		prediction = model.predict(data.reshape(1, judging_data, features))
 		pred = np.argmax(prediction)
 		print(pred)
 		pred = str(pred).encode('utf-8') 
 		ser.write(pred)
-	except SyntaxError as e:
-		print(e)
+	except SyntaxError as e0:
+		print(e0)
+		print("Retry")
+		continue
+	except ValueError as e1:
+		print(e1)
 		print("Retry")
 		continue

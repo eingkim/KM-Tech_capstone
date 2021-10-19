@@ -32,7 +32,7 @@ labels = np.load('./label.npy')
 
 batch = 10
 judging_data = 4
-features = 8
+features = 43
 
 data = data.reshape((batch, judging_data, features))
 labels = labels.reshape((batch, 1))

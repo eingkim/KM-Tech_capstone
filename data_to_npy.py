@@ -13,6 +13,14 @@ from google.colab import files
 
 inf = 10000 # inf 최대값 지정 (inf = 최대값)
 
+files.upload()
+f = open('tempResult.txt', 'r')
+data_txt = f.read()
+data_txt = data_txt[:-1]
+
+exec("data_raw = {" + data_txt + "}")
+
+"""
 data_raw = {
     ### ↓↓시리얼 통신 출력 데이터 복붙 하는곳↓↓ ###
     '01:09:19': [0001.10, 3922.11, 5322.49, 3244.96, 4134.93, 4122.32, 4127.32, 0, 25.00],
@@ -30,17 +38,17 @@ data_raw = {
     '01:10:58': [1301.53, 9001.44, 7682.11, 6932.89, 9744.11, 8614.22, 8831.55, 0, 25]
     ### ↑↑시리얼 통신 출력 데이터 복붙 하는곳↑↑ ###
 }
-
+"""
 ### ↓↓판단할 데이터의 개수 (3차원 데이터) ###
 judging_data = 4
 ### ↑↑판단할 데이터의 개수 (3차원 데이터) ###
 
 ### ↓↓주파수 개수 (20kHz 근처에 40번 증가시키면 41 입력) ###
-features = 7
+features = 41
 ### ↑↑주파수 개수 (20kHz 근처에 40번 증가시키면 41 입력) ###
 
 ### ↓↓건조 완료된 시간 입력 ###
-dried_time = '01:10:21'
+dried_time = '0:0:18'
 ### ↑↑건조 완료된 시간 입력 ###
 
 ### ↓↓파일 저장할 경로 입력 ###
@@ -76,9 +84,7 @@ for num1 in range(batch):   # 라벨을 제외한 데이터 전처리
         data[num1][num2] = data_raw[list(data_raw.keys())[num1+cnt]]
         cnt += 1
 
-print(data.ndim)
-
-print(data[:][:][:-1])
+print(data)
 
 data /= inf   # 0~10,000 사이의 값으로
 for num1 in range(batch):
