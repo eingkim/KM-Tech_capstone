@@ -73,7 +73,7 @@ void loop(void)
   delay(1000);
   servo.write(115);
   measureTemperature();
-  Serial.println("],");
+  Serial.println("]");
   
   delay(1000);
   servo.write(170);
@@ -86,7 +86,7 @@ void loop(void)
   servo.write(115);
   servo.write(65);
   measureTemperature();
-  Serial.println("],");
+  Serial.println("]");
   delay(1000);
   servo.write(10);
 }

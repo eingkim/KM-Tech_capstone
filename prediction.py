@@ -16,16 +16,24 @@ ser = serial.Serial(port, baudrate, timeout=1)
 data_list = []
 
 while True:
-	line = ser.readline().decode("utf-8")
-	#line = line[:-1]
-	exec("temp_dic = {" + line[:-1] + "}")
-	data_list.append(list(temp_dic.values()))
-	while len(data_list) > judging_data:
-		data_list.pop(0)
-	if len(data_list) < judging_data:
+	try:
+		line = ser.readline().decode("utf-8")
+		#line = line[:-1]
+		exec("temp_dic = {" + line + "}")
+		data_list.append(list(temp_dic.values()))
+		while len(data_list) > judging_data:
+			data_list.pop(0)
+		if len(data_list) < judging_data:
+			continue
+		data = np.array(data_list)
+		#print(data)
+		#data = data.reshape((1, judging_data, features))
+		prediction = model.predict(data.reshape(1, judging_data, features))
+		pred = np.argmax(prediction)
+		print(pred)
+		pred = str(pred).encode('utf-8') 
+		ser.write(pred)
+	except SyntaxError as e:
+		print(e)
+		print("Retry")
 		continue
-	data = np.array(data_list)
-	print(data)
-	#data = data.reshape((1, judging_data, features))
-	prediction = model.predict(data.reshape(1, judging_data, features))
-	print(np.argmax(prediction))
