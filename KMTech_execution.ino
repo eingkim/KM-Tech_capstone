@@ -128,7 +128,7 @@ void frequencySweepEasy() {
       Serial.print(count_inf);
       Serial.print(", ");
       
-     /* if(complete_dry(average, sec, count_inf))
+      if(complete_dry())
       {
         digitalWrite(VCO, LOW);
         digitalWrite(fan, LOW);
@@ -137,7 +137,7 @@ void frequencySweepEasy() {
         servo.write(90);
         while(1);
       }
-*/
+      
     } else {
       Serial.println("Frequency sweep failed...");
     }
@@ -195,7 +195,7 @@ void frequencySweepRaw() {
       Serial.print(count_inf);
       Serial.print(", ");
       
-     /* if(complete_dry(average, sec, count_inf))
+     if(complete_dry())
       {
         digitalWrite(VCO, LOW);
         digitalWrite(fan, LOW);
@@ -204,7 +204,7 @@ void frequencySweepRaw() {
         servo.write(90); 
         while(1);
       }
-*/
+
     // Set AD5933 power mode to standby when finished
     if (!AD5933::setPowerMode(POWER_STANDBY))
         Serial.println("Could not set to standby...");
@@ -217,6 +217,22 @@ void measureTemperature()
   temperature = AD5933::getTemperature();
   Serial.print(temperature, 4);
   //Serial.println(" ºC");
+}
+bool complete_dry()
+{
+  if(Serial.available())
+  {
+    val = Serial.read();
+    if ('1' == val)
+      return true;
+    else if ('0' == val)
+      return false;
+    else
+    {
+      Serial.println("Serial Communication Error");
+      return false;
+    }
+  }  
 }
 /*
 bool complete_dry(double average, unsigned long sec, int count_inf){
