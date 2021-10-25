@@ -73,7 +73,7 @@ void loop(void)
   delay(1000);
   servo.write(115);
   measureTemperature();
-  Serial.println("]");
+  //Serial.println("]");
   
   delay(1000);
   servo.write(170);
@@ -86,7 +86,7 @@ void loop(void)
   servo.write(115);
   servo.write(65);
   measureTemperature();
-  Serial.println("]");
+  //Serial.println("]");
   delay(1000);
   servo.write(10);
 }
@@ -104,7 +104,7 @@ void frequencySweepEasy() {
     if (AD5933::frequencySweep(real, imag, NUM_INCR+1)) {
       // Print the frequency data
       double cfreq = START_FREQ/1000.0;
-      t=millis();
+      /*t=millis();
       sec = t / 1000;
       Serial.print("'"); 
       Serial.print(sec/3600);
@@ -112,7 +112,7 @@ void frequencySweepEasy() {
       Serial.print((sec%3600)/60);
       Serial.print(":");
       Serial.print((sec%3600)%60);
-      Serial.print("': [");
+      Serial.print("': [");*/
       for (int i = 0; i < NUM_INCR+1; i++, cfreq += FREQ_INCR/1000.0) {
 
         // Compute impedance
@@ -159,7 +159,7 @@ void frequencySweepRaw() {
          {
              Serial.println("Could not initialize frequency sweep...");
          }
-    t=millis();
+    /*t=millis();
       sec = t / 1000;
        Serial.print("'"); 
       Serial.print(sec/3600);
@@ -167,7 +167,7 @@ void frequencySweepRaw() {
       Serial.print((sec%3600)/60);
       Serial.print(":");
       Serial.print((sec%3600)%60);
-       Serial.print("': [");
+       Serial.print("': [");*/
     // Perform the actual sweep
     while ((AD5933::readStatusRegister() & STATUS_SWEEP_DONE) != STATUS_SWEEP_DONE) {
         // Get the frequency data for this frequency point
@@ -216,7 +216,7 @@ void measureTemperature()
   double temperature;
   //AD5933::enableTemperature(TEMP_MEASURE);
   temperature = AD5933::getTemperature();
-  Serial.print(temperature, 4);
+  Serial.println(temperature, 4);
   //Serial.println(" ºC");
 }
 bool complete_dry()
