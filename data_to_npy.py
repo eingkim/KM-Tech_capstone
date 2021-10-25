@@ -10,11 +10,12 @@ Original file is located at
 import numpy as np
 import pandas as pd
 from google.colab import files
+from sklearn.preprocessing import MinMaxScaler
 
-inf = 10000 # inf 최대값 지정 (inf = 최대값)
+inf = 500000 # inf 최대값 지정 (inf = 최대값)
 
-files.upload()
-f = open('tempResult.txt', 'r')
+#files.upload()
+f = open('10.23_exp3_2t시간38분58초.txt', 'r')
 data_txt = f.read()
 data_txt = data_txt[:-1]
 
@@ -40,7 +41,7 @@ data_raw = {
 }
 """
 ### ↓↓판단할 데이터의 개수 (3차원 데이터) ###
-judging_data = 4
+judging_data = 10
 ### ↑↑판단할 데이터의 개수 (3차원 데이터) ###
 
 ### ↓↓주파수 개수 (20kHz 근처에 40번 증가시키면 41 입력) ###
@@ -48,7 +49,7 @@ features = 41
 ### ↑↑주파수 개수 (20kHz 근처에 40번 증가시키면 41 입력) ###
 
 ### ↓↓건조 완료된 시간 입력 ###
-dried_time = '0:0:18'
+dried_time = '2:38:58'
 ### ↑↑건조 완료된 시간 입력 ###
 
 ### ↓↓파일 저장할 경로 입력 ###
@@ -69,7 +70,7 @@ for key in target.keys():
     if key >= dried_time:
         target[key] = {'target': 1}
 target = list(target.values())
-        
+
 
 label = np.zeros((batch, 1)) # 넘파이 배열로 라벨 만들기
 for i in range(batch):
@@ -84,7 +85,29 @@ for num1 in range(batch):   # 라벨을 제외한 데이터 전처리
         data[num1][num2] = data_raw[list(data_raw.keys())[num1+cnt]]
         cnt += 1
 
-print(data)
+data_imp = data[:, :, :-2]
+data_inf = data[:, :, -2:-1]
+data_temp = data[:, :, -1:]
+
+data_imp = data_imp.reshape(batch * judging_data, features-2)
+data_inf = data_inf.reshape(batch * judging_data, 1)
+data_temp = data_temp.reshape(batch * judging_data, 1)
+
+scaler = MinMaxScaler()
+scaler.fit(data_imp)
+data_imp = scaler.transform(data_imp)
+scaler.fit(data_inf)
+data_inf = scaler.transform(data_inf)
+scaler.fit(data_temp)
+data_temp = scaler.transform(data_temp)
+
+data_imp = data_imp.reshape(batch, judging_data, features-2)
+data_inf = data_inf.reshape(batch, judging_data, 1)
+data_temp = data_temp.reshape(batch, judging_data, 1)
+
+data = np.concatenate((data_imp, data_inf, data_temp), axis=2)
+
+print(np.max(data))
 
 data /= inf   # 0~10,000 사이의 값으로
 for num1 in range(batch):
@@ -93,15 +116,15 @@ for num1 in range(batch):
     data[num1][num2][features-1] /= features-2
 ##### 전처리 완료 #####
 
-np.save(path + 'data', data)
-np.save(path + 'label', label)
-files.download('data.npy')
-files.download('label.npy')
+np.save(path + 'data0', data)
+np.save(path + 'label0', label)
+files.download('data0.npy')
+files.download('label0.npy')
 ##### 넘파이로 저장 완료 #####
 
 # 파일 불러내 확인하고 싶으면 아래 주석 해제하고 실행해 볼 것
 #files.upload()
-
+"""
 tmp = np.load(path + 'data.npy')
 print(tmp.shape)
 print(tmp)
@@ -109,7 +132,7 @@ print(tmp)
 tmp = np.load(path + 'label.npy')
 print(tmp.shape)
 print(tmp)
-
+"""
 
 print('batch = {}'.format(batch))
 print('judging_data = {}'.format(judging_data))
