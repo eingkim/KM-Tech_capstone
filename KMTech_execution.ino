@@ -221,6 +221,7 @@ void measureTemperature()
 }
 bool complete_dry()
 {
+  int val;
   if(Serial.available())
   {
     val = Serial.read();
