@@ -118,7 +118,7 @@ void frequencySweepEasy() {
         // Compute impedance
         double magnitude = sqrt(pow(real[i], 2) + pow(imag[i], 2));
         double impedance = 1/(magnitude*gain[i]);
-       
+       impedance /= 100;
         if(isinf(impedance))
           count_inf++;
         Serial.print(impedance);
@@ -180,6 +180,7 @@ void frequencySweepRaw() {
         // Compute impedance
         double magnitude = sqrt(pow(real, 2) + pow(imag, 2));
         double impedance = 1/(magnitude*gain[i]);
+        impedance /= 100;
   //      Serial.print("  |Z|=");
         Serial.print(impedance);
         Serial.print(", ");
